@@ -1,3 +1,7 @@
+body {
+    background-color: #fafafa;
+}
+
 #scenario {
     position: absolute;
     bottom: 100px;
