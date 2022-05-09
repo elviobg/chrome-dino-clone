@@ -21,6 +21,14 @@ body {
     background-image: url(../../public/assets/images/dino.png);
 }
 
+.cactus {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    bottom: 0;
+    background-image: url(../../public/assets/images/cactus.png);
+}
+
 @keyframes slideBackground {
     from {
         background-position: 20000%;

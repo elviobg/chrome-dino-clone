@@ -10,6 +10,7 @@ const game = {
 }
 
 document.addEventListener('keydown', handleKeyDown);
+createCactus();
 
 function handleKeyDown(event) {
     if (event.keyCode === 32) {
@@ -87,6 +88,14 @@ function pause() {
 function gameOver() {
     game.status = 'end';
     scenario.style.animationPlayState = 'paused';
+}
+
+function createCactus() {
+    const cactus = document.createElement('div');
+    cactus.classList.add('cactus');
+    scenario.appendChild(cactus);
+    cactus.style.left = '1000px';
+    game.cactus[0] = {element: cactus, position: 1000};
 }
 
 gameLoop();
