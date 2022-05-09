@@ -1,7 +1,16 @@
 #scenario {
-
+    position: absolute;
+    bottom: 100px;
+    background-repeat: repeat-x;
+    width: 100%;
+    height: 200px;
+    background-image: url(../../public/assets/images/background.png);
 }
 
 #dino {
-    
+    position: absolute;
+    bottom: 0;
+    width: 60px;
+    height: 60px;
+    background-image: url(../../public/assets/images/dino.png);
 }
