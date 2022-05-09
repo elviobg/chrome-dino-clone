@@ -5,13 +5,18 @@ const game = {
         status: 'run',
     },
     movesToUp: 8,
+    status: 'begin',
+    cactus: [],
 }
 
-document.addEventListener('keydown', handleKeyUp);
+document.addEventListener('keydown', handleKeyDown);
 
-function handleKeyUp(event) {
-    if (event.keyCode === 32 && !game.dino.isJumping) {
+function handleKeyDown(event) {
+    if (event.keyCode === 32) {
         jump();
+    }
+    if (event.keyCode === 13 && game.status !== 'end') {
+        pause();
     }
 }
 
@@ -39,14 +44,49 @@ function jump() {
     }
 }
 
+function updateCactus() {
+    let collision = false;
+    game.cactus.forEach((cactus) =>{
+        cactus.position = cactus.position - 10;
+        cactus.element.style.left = `${cactus.position}px`;
+        if (cactus.position > 0 && cactus.position < 60 && game.dino.position < 60){
+            collision = true;
+        }
+    });
+    return collision;
+}
+
 function gameLoop () {
     setInterval(function () {
-        if(game.dino.status === 'up') {
+        if(game.status === 'end'){
+            return;  
+        }else if(game.status === 'pause'){
+            return;  
+        } else if(game.dino.status === 'up') {
             dinoUp();
         } else if(game.dino.status === 'down') {
             dinoDown();
         }
+        const collision = updateCactus();
+        if(collision) {
+            gameOver();
+        }
     }, 20);
+}
+
+function pause() {
+    if (game.status === 'pause') {
+        scenario.style.animationPlayState = 'running';
+        game.status = 'running';
+    } else {
+        scenario.style.animationPlayState = 'paused';
+        game.status = 'pause';
+    }
+}
+
+function gameOver() {
+    game.status = 'end';
+    scenario.style.animationPlayState = 'paused';
 }
 
 gameLoop();
