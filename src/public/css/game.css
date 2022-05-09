@@ -9,6 +9,8 @@ body {
     width: 100%;
     height: 200px;
     background-image: url(../../public/assets/images/background.png);
+    animation: slideBackground 600s infinite linear;
+    -webkit-animation: slideBackground 600s infinite linear;
 }
 
 #dino {
@@ -17,4 +19,13 @@ body {
     width: 60px;
     height: 60px;
     background-image: url(../../public/assets/images/dino.png);
+}
+
+@keyframes slideBackground {
+    from {
+        background-position: 20000%;
+    }
+    to {
+        background-position: 0%;
+    }
 }
