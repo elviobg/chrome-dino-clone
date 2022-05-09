@@ -1,11 +1,14 @@
 const game = {
     dino: {
-        isJumping: false,
         position: 0,
-    }
+        positionToUp: 0,
+        status: 'run',
+    },
+    movesToUp: 8,
 }
 
-document.addEventListener('keyup', handleKeyUp);
+document.addEventListener('keydown', handleKeyUp);
+
 function handleKeyUp(event) {
     if (event.keyCode === 32 && !game.dino.isJumping) {
         jump();
@@ -13,35 +16,37 @@ function handleKeyUp(event) {
 }
 
 function dinoUp() {
-    game.dino.isJumping = true;
-    let moves = 0;
-    let dinoUpInterval = setInterval(() => {
-        moves += 1;
-        game.dino.position += 20;
-        dino.style.bottom = game.dino.position + 'px';
-        if(moves >= 8) {
-            dinoDown();
-            clearInterval(dinoUpInterval);
-        }
-      }, 20);
+    game.dino.positionToUp += 1;
+    game.dino.position = game.dino.positionToUp * 20;
+    dino.style.bottom = game.dino.position + 'px';
+    if(game.dino.positionToUp >= 8) {
+        game.dino.status = 'down';
+    }
 }
 
 function dinoDown() {
-    let moves = 0;
-    let dinoDownInterval = setInterval(() => {
-        moves += 1;
-        game.dino.position -= 20;
-        dino.style.bottom = game.dino.position + 'px';
-        if (moves >= 8) {
-          clearInterval(dinoDownInterval);
-          game.dino.isJumping = false;
+    game.dino.positionToUp -= 1;
+    game.dino.position = game.dino.positionToUp * 20;
+    dino.style.bottom = game.dino.position + 'px';
+    if(game.dino.positionToUp <= 0) {
+        game.dino.status = 'run';
+    }
+}
+
+function jump() {
+    if(game.dino.status === 'run') {
+        game.dino.status = 'up';
+    }
+}
+
+function gameLoop () {
+    setInterval(function () {
+        if(game.dino.status === 'up') {
+            dinoUp();
+        } else if(game.dino.status === 'down') {
+            dinoDown();
         }
     }, 20);
 }
 
-function jump() {
-    if(!game.dino.isJumping) {
-        dinoUp();
-    }
-}
-  
+gameLoop();
