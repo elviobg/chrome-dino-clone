@@ -7,6 +7,7 @@ const game = {
     movesToUp: 8,
     status: 'begin',
     cactus: [],
+    nextRespawn: 6000,
 }
 
 document.addEventListener('keydown', handleKeyDown);
@@ -54,6 +55,11 @@ function updateCactus() {
             collision = true;
         }
     });
+    const first = game.cactus[0];
+    if (first && first.position < -100) {
+        scenario.removeChild(first.element);
+        game.cactus.pop();
+    }
     return collision;
 }
 
@@ -71,6 +77,11 @@ function gameLoop () {
         const collision = updateCactus();
         if(collision) {
             gameOver();
+        }
+        
+        game.nextRespawn -= 20;
+        if (game.nextRespawn <= 0) {
+            createCactus();
         }
     }, 20);
 }
@@ -95,7 +106,9 @@ function createCactus() {
     cactus.classList.add('cactus');
     scenario.appendChild(cactus);
     cactus.style.left = '1000px';
-    game.cactus[0] = {element: cactus, position: 1000};
+    game.cactus.push({element: cactus, position: 1000});
+    game.nextRespawn = 1000 + Math.random() * 3000;
+    console.log(game.cactus);
 }
 
 gameLoop();
