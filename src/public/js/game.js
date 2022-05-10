@@ -17,8 +17,12 @@ function handleKeyDown(event) {
     if (event.keyCode === 32) {
         jump();
     }
-    if (event.keyCode === 13 && game.status !== 'end') {
-        pause();
+    if (event.keyCode === 13) {
+        if(game.status === 'begin') {
+            restart();
+        } else {
+            pause();
+        }
     }
 }
 
@@ -49,26 +53,24 @@ function jump() {
 function updateCactus() {
     let collision = false;
     game.cactus.forEach((cactus) =>{
-        cactus.position = cactus.position - 10;
-        cactus.element.style.left = `${cactus.position}px`;
         if (cactus.position > 0 && cactus.position < 60 && game.dino.position < 60){
             collision = true;
         }
+        cactus.position = cactus.position - 10;
+        cactus.element.style.left = `${cactus.position}px`;
     });
-    const first = game.cactus[0];
-    if (first && first.position < -100) {
-        scenario.removeChild(first.element);
-        game.cactus.pop();
-    }
+    game.cactus = game.cactus.filter(function(element) {
+        return element.position > -100;
+    });
     return collision;
 }
 
 function gameLoop () {
     setInterval(function () {
-        if(game.status === 'end'){
+        if(game.status === 'begin'){
             return;  
         }else if(game.status === 'pause'){
-            return;  
+            return;
         } else if(game.dino.status === 'up') {
             dinoUp();
         } else if(game.dino.status === 'down') {
@@ -97,7 +99,7 @@ function pause() {
 }
 
 function gameOver() {
-    game.status = 'end';
+    game.status = 'begin';
     scenario.style.animationPlayState = 'paused';
 }
 
@@ -108,7 +110,24 @@ function createCactus() {
     cactus.style.left = '1000px';
     game.cactus.push({element: cactus, position: 1000});
     game.nextRespawn = 1000 + Math.random() * 3000;
-    console.log(game.cactus);
+}
+
+function restart() {
+    game.status = 'running';
+    game.cactus = [];
+    game.dino = {
+        position: 0,
+        positionToUp: 0,
+        status: 'run',
+    };
+    game.nextRespawn = 0;
+    scenario.style.animationPlayState = 'running';
+    dino.style.bottom = '0px';
+
+    document.querySelectorAll('.cactus').forEach((cactus) =>{
+        cactus.remove();
+    });
 }
 
 gameLoop();
+scenario.style.animationPlayState = 'paused';
