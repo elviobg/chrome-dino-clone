@@ -37,3 +37,16 @@ body {
         background-position: 0%;
     }
 }
+
+h1.text {
+    color: #4e4e4e;
+    text-align: center;
+}
+
+h1.center {
+    text-align: center;
+}
+
+h1.left {
+    text-align: right;
+}

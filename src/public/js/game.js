@@ -7,7 +7,8 @@ const game = {
     movesToUp: 8,
     status: 'begin',
     cactus: [],
-    nextRespawn: 6000,
+    nextRespawn: 0,
+    score: 0,
 }
 
 document.addEventListener('keydown', handleKeyDown);
@@ -68,7 +69,7 @@ function updateCactus() {
 function gameLoop () {
     setInterval(function () {
         if(game.status === 'begin'){
-            return;  
+            return;
         }else if(game.status === 'pause'){
             return;
         } else if(game.dino.status === 'up') {
@@ -85,6 +86,8 @@ function gameLoop () {
         if (game.nextRespawn <= 0) {
             createCactus();
         }
+        game.score += 1;
+        score.innerHTML = `SCORE: ${game.score}`;
     }, 20);
 }
 
@@ -92,15 +95,18 @@ function pause() {
     if (game.status === 'pause') {
         scenario.style.animationPlayState = 'running';
         game.status = 'running';
+        banner.innerHTML = 'Pressione Enter para pausar...';
     } else {
         scenario.style.animationPlayState = 'paused';
         game.status = 'pause';
+        banner.innerHTML = 'Pressione Enter para recomeçar...';
     }
 }
 
 function gameOver() {
     game.status = 'begin';
     scenario.style.animationPlayState = 'paused';
+    banner.innerHTML = 'Errooooooooooou!!! <br>Pressione Enter para perder de novo...';
 }
 
 function createCactus() {
@@ -127,6 +133,8 @@ function restart() {
     document.querySelectorAll('.cactus').forEach((cactus) =>{
         cactus.remove();
     });
+    banner.innerHTML = 'Pressione Enter para pausar...';
+    game.score = 0;
 }
 
 gameLoop();
